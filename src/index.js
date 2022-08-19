@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, 
+import { getFirestore, collection, getDocs, onSnapshot,
   addDoc, deleteDoc, doc 
 } from "firebase/firestore";
 
@@ -24,21 +24,29 @@ const db = getFirestore();
 const colRef = collection(db, 'books') // second argument is the collection we want to retrieve
 
 // retrieve all documents inside of the collection being passed in as argument (get collection data) and returns a promise
-getDocs(colRef)
-  .then(snapshot => {
-    // console.log(snapshot.docs) // [Fh, Fh, Fh]
-    let books = [];
-    snapshot.docs.forEach((doc) => {
-      books.push({ ...doc.data(), id: doc.id })
-      // for each of the documents ('books'), add a new object to empty books array, and for each object, get the data and id of the document
-    })
-    console.log(books) // array of book objects
-  })
+// getDocs(colRef)
+//   .then(snapshot => {
+//     // console.log(snapshot.docs) // [Fh, Fh, Fh]
+//     let books = [];
+//     snapshot.docs.forEach((doc) => {
+//       books.push({ ...doc.data(), id: doc.id })
+//       // for each of the documents ('books'), add a new object to empty books array, and for each object, get the data and id of the document
+//     })
+//     console.log(books) // array of book objects
+//   })
+//   // in case there is an error, log it to console
+//   .catch(err => {
+//     console.log(err.message)
+//   })
 
-  // in case there is an error, log it to console
-  .catch(err => {
-    console.log(err.message)
+// real time colletion data
+onSnapshot(colRef, (snapshot) => {
+  let books = [];
+  snapshot.docs.forEach((doc) => {
+    books.push({ ...doc.data(), id: doc.id })
   })
+  console.log(books)
+}) // first argument is collection we want to listen to, second argument is a callback function that goes off every time there is a change in the collection and returns a new snapshot
 
 // adding documents
 const addBookForm = document.querySelector('.add')
