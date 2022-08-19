@@ -55,7 +55,7 @@ const q = query(colRef, orderBy('createdAt'))
 //   })
 
 // real time colletion data
-onSnapshot(q, (snapshot) => { // first arg changes from colRef to q when querying (colRef as first arg means looking for everything)
+const unsubCol = onSnapshot(q, (snapshot) => { // first arg changes from colRef to q when querying (colRef as first arg means looking for everything)
   let books = [];
   snapshot.docs.forEach((doc) => {
     books.push({ ...doc.data(), id: doc.id })
@@ -97,7 +97,7 @@ getDoc(docRef)
   // })
 
 // subscribe to a document to get changes to it
-onSnapshot(docRef, (doc) => {
+const unsubDoc = onSnapshot(docRef, (doc) => {
   console.log(doc.data(), doc.id)
 }) // first argument is document to reference, second argument is a callback that goes off every time firestore sends back a new version of the document
 
@@ -160,6 +160,15 @@ logoutButton.addEventListener('click', () => {
 })
 
 // subscribing to auth changes
-onAuthStateChanged(auth, (user) => {
+const unsubAuth = onAuthStateChanged(auth, (user) => {
   console.log('user status changed: ', user)
 }) // first argument is auth, second argument is a callback that fires every time there is an authentication change of the user on the website (whenever a login, logout, or sign up happens)
+
+// unsubscribing from changes (auth & db) - stops console logging of snapshots
+const unsubBuotton = document.querySelector('.unsub')
+unsubBuotton.addEventListener('click', () => {
+  console.log('unsubscribe')
+  unsubCol()
+  unsubDoc()
+  unsubAuth()
+})
