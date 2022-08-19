@@ -5,7 +5,9 @@ import { getFirestore, collection, getDocs, onSnapshot,
   orderBy, serverTimestamp,
   getDoc, updateDoc
 } from "firebase/firestore";
-import { getAuth } from 'firebase/auth'
+import { getAuth,
+  createUserWithEmailAndPassword
+} from 'firebase/auth'
 
 // determines which project to connect to
 const firebaseConfig = {
@@ -110,4 +112,20 @@ updateForm.addEventListener('submit', (e) => {
   .then(() => {
     updateForm.reset()
   })
+})
+
+// signing users up
+const signupForm = document.querySelector('.signup')
+signupForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+  const email = signupForm.email.value
+  const password = signupForm.password.value
+  createUserWithEmailAndPassword(auth, email, password) // asynchronous function - first argument is auth object, second and third arguments are email and password
+    .then((cred) => {
+      console.log('user created:', cred.user) // cred.user gets access to that user
+      signupForm.reset()
+    })
+    .catch((err) => {
+      alert(err.message)
+    })
 })
