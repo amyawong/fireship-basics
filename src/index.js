@@ -3,7 +3,7 @@ import { getFirestore, collection, getDocs, onSnapshot,
   addDoc, deleteDoc, doc, 
   query, where,
   orderBy, serverTimestamp,
-  getDoc
+  getDoc, updateDoc
 } from "firebase/firestore";
 
 // determines which project to connect to
@@ -94,3 +94,18 @@ getDoc(docRef)
 onSnapshot(docRef, (doc) => {
   console.log(doc.data(), doc.id)
 }) // first argument is document to reference, second argument is a callback that goes off every time firestore sends back a new version of the document
+
+// updating a document
+const updateForm = document.querySelector('.update')
+updateForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+
+  // get a document reference
+  const docRef = doc(db, 'books', updateForm.id.value)
+  updateDoc(docRef, {
+    title: 'updated title',
+  })
+  .then(() => {
+    updateForm.reset()
+  })
+})
