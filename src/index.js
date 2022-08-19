@@ -6,7 +6,8 @@ import { getFirestore, collection, getDocs, onSnapshot,
   getDoc, updateDoc
 } from "firebase/firestore";
 import { getAuth,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword, signOut
 } from 'firebase/auth'
 
 // determines which project to connect to
@@ -127,5 +128,32 @@ signupForm.addEventListener('submit', (e) => {
     })
     .catch((err) => {
       alert(err.message)
+    })
+})
+
+// logging in
+const loginForm = document.querySelector('.login')
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+  const email = loginForm.email.value
+  const password = loginForm.password.value
+  signInWithEmailAndPassword(auth, email, password)
+    .then((cred) => {
+      console.log('user logged in: ', cred.user)
+    })
+    .catch((err) => {
+      alert(err.message)
+    })
+})
+
+// logging out
+const logoutButton = document.querySelector('.logout')
+logoutButton.addEventListener('click', () => {
+  signOut(auth)
+    .then(() => {
+      console.log('the user has signed out')
+    })
+    .catch((err) => {
+      console.log(err.message)
     })
 })
