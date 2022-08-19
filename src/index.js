@@ -1,5 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection, getDocs, 
+  addDoc, deleteDoc, doc 
+} from "firebase/firestore";
 
 // determines which project to connect to
 const firebaseConfig = {
@@ -32,7 +34,32 @@ getDocs(colRef)
     })
     console.log(books) // array of book objects
   })
+
   // in case there is an error, log it to console
   .catch(err => {
     console.log(err.message)
   })
+
+// adding documents
+const addBookForm = document.querySelector('.add')
+addBookForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+  addDoc(colRef, {
+    title: addBookForm.title.value,
+    author: addBookForm.author.value,
+  }) // first argument is collection reference, second argument is a new object we want to add that collection to
+  .then(() => {
+    addBookForm.reset()
+  })
+})
+
+// deleting documents
+const deleteBookForm = document.querySelector('.delete')
+deleteBookForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+  const docRef = doc(db, 'books', deleteBookForm.id.value)
+  deleteDoc(docRef)
+    .then(() => {
+      deleteBookForm.reset()
+    })
+})
