@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, onSnapshot,
-  addDoc, deleteDoc, doc 
+  addDoc, deleteDoc, doc, 
+  query, where
 } from "firebase/firestore";
 
 // determines which project to connect to
@@ -23,6 +24,11 @@ const db = getFirestore();
 // get reference to specific collection in database (collection reference)
 const colRef = collection(db, 'books') // second argument is the collection we want to retrieve
 
+// query reference
+const q = query(colRef, where("author", "==", "patrick rothfuss")) 
+// first argument of query function is which collection to look at for query, second argument is where function;
+// first argument of where function is field/property name, second argument is comparison, third argument is what we want value to be equal to
+
 // retrieve all documents inside of the collection being passed in as argument (get collection data) and returns a promise
 // getDocs(colRef)
 //   .then(snapshot => {
@@ -40,7 +46,7 @@ const colRef = collection(db, 'books') // second argument is the collection we w
 //   })
 
 // real time colletion data
-onSnapshot(colRef, (snapshot) => {
+onSnapshot(q, (snapshot) => { // first arg changes from colRef to q when querying (colRef as first arg means looking for everything)
   let books = [];
   snapshot.docs.forEach((doc) => {
     books.push({ ...doc.data(), id: doc.id })
