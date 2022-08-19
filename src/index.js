@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, onSnapshot,
   addDoc, deleteDoc, doc, 
   query, where,
-  orderBy
+  orderBy, serverTimestamp
 } from "firebase/firestore";
 
 // determines which project to connect to
@@ -26,7 +26,7 @@ const db = getFirestore();
 const colRef = collection(db, 'books') // second argument is the collection we want to retrieve
 
 // query reference
-const q = query(colRef, where("author", "==", "patrick rothfuss"), orderBy('title', 'desc')) 
+const q = query(colRef, orderBy('createdAt')) 
 // first argument of query function is which collection to look at for query, second argument is where function, third argument is orderBy function that you customize how you want properties ordered;
 // first argument of where function is field/property name, second argument is comparison, third argument is what we want value to be equal to
 // in order to use orderBy(), need to create an index in database
@@ -63,6 +63,7 @@ addBookForm.addEventListener('submit', (e) => {
   addDoc(colRef, {
     title: addBookForm.title.value,
     author: addBookForm.author.value,
+    createdAt: serverTimestamp(),
   }) // first argument is collection reference, second argument is a new object we want to add that collection to
   .then(() => {
     addBookForm.reset()
