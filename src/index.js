@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, onSnapshot,
   addDoc, deleteDoc, doc, 
-  query, where
+  query, where,
+  orderBy
 } from "firebase/firestore";
 
 // determines which project to connect to
@@ -25,9 +26,10 @@ const db = getFirestore();
 const colRef = collection(db, 'books') // second argument is the collection we want to retrieve
 
 // query reference
-const q = query(colRef, where("author", "==", "patrick rothfuss")) 
-// first argument of query function is which collection to look at for query, second argument is where function;
+const q = query(colRef, where("author", "==", "patrick rothfuss"), orderBy('title', 'desc')) 
+// first argument of query function is which collection to look at for query, second argument is where function, third argument is orderBy function that you customize how you want properties ordered;
 // first argument of where function is field/property name, second argument is comparison, third argument is what we want value to be equal to
+// in order to use orderBy(), need to create an index in database
 
 // retrieve all documents inside of the collection being passed in as argument (get collection data) and returns a promise
 // getDocs(colRef)
