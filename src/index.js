@@ -2,7 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, onSnapshot,
   addDoc, deleteDoc, doc, 
   query, where,
-  orderBy, serverTimestamp
+  orderBy, serverTimestamp,
+  getDoc
 } from "firebase/firestore";
 
 // determines which project to connect to
@@ -80,3 +81,16 @@ deleteBookForm.addEventListener('submit', (e) => {
       deleteBookForm.reset()
     })
 })
+
+// get a single document
+const docRef = doc(db, 'books', '12mSQOqD542Jcm0Kec47') // start by making a document reference
+// first argument is database, second is collection, third is id
+getDoc(docRef)
+  // .then((doc) => {
+  //   console.log(doc.data(), doc.id)
+  // })
+
+// subscribe to a document to get changes to it
+onSnapshot(docRef, (doc) => {
+  console.log(doc.data(), doc.id)
+}) // first argument is document to reference, second argument is a callback that goes off every time firestore sends back a new version of the document
