@@ -7,7 +7,8 @@ import { getFirestore, collection, getDocs, onSnapshot,
 } from "firebase/firestore";
 import { getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword, signOut
+  signInWithEmailAndPassword, signOut,
+  onAuthStateChanged
 } from 'firebase/auth'
 
 // determines which project to connect to
@@ -157,3 +158,8 @@ logoutButton.addEventListener('click', () => {
       console.log(err.message)
     })
 })
+
+// subscribing to auth changes
+onAuthStateChanged(auth, (user) => {
+  console.log('user status changed: ', user)
+}) // first argument is auth, second argument is a callback that fires every time there is an authentication change of the user on the website (whenever a login, logout, or sign up happens)
