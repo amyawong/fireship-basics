@@ -5,6 +5,7 @@ import { getFirestore, collection, getDocs, onSnapshot,
   orderBy, serverTimestamp,
   getDoc, updateDoc
 } from "firebase/firestore";
+import { getAuth } from 'firebase/auth'
 
 // determines which project to connect to
 const firebaseConfig = {
@@ -20,8 +21,9 @@ const firebaseConfig = {
 // connects to firebase backend
 initializeApp(firebaseConfig);
 
-// initialize firestore service
+// initialize firestore services
 const db = getFirestore();
+const auth = getAuth();
 
 // get reference to specific collection in database (collection reference)
 const colRef = collection(db, 'books') // second argument is the collection we want to retrieve
